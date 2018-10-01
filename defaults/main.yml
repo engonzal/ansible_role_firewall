@@ -1,0 +1,12 @@
+---
+# Allow both UDP and TCP
+#firewall_allow:
+# - 443
+
+# Allow only TCP
+#firewall_allow_tcp:
+# - 443
+
+# Allow only UDP
+#firewall_allow_udp:
+# - 443

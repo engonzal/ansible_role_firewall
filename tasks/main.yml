@@ -1,0 +1,41 @@
+---
+- assert:
+    that:
+      - ansible_ssh_port in (firewall_allow| default([])| union(firewall_allow_tcp|default([])))
+    when: (firewall_allow is defined) or (firewall_allow_tcp is defined) or (firewall_allow_udp is defined)
+    msg: "You must allow the current ssh port ({{ ansible_ssh_port }}) in firewall_allow_tcp or firewall_allow"
+
+- name: Install UFW firewall
+  package:
+    name: ufw
+    state: present
+  when: (firewall_allow is defined) or (firewall_allow_tcp is defined) or (firewall_allow_udp is defined)
+
+- name: Allow gerneral ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+  loop: "{{ firewall_allow }}"
+  when: firewall_allow is defined
+
+- name: Allow tcp specific ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: "{{ firewall_allow_tcp }}"
+  when: firewall_allow_tcp is defined
+
+- name: Allow udp specific ports
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: udp
+  loop: "{{ firewall_allow_udp }}"
+  when: firewall_allow_udp is defined
+
+- name: Set default to block and enable ufw
+  ufw:
+    state: enabled
+    policy: deny
+  when: (firewall_allow is defined) or (firewall_allow_tcp is defined) or (firewall_allow_udp is defined)
