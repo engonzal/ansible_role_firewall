@@ -1,4 +1,4 @@
-ansible_role_users
+ansible_role_firewall
 =========
 
 Ansible role to provision firewall allowed ports.
