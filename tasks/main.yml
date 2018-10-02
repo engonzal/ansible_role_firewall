@@ -1,5 +1,6 @@
 ---
-- assert:
+- name: Ensure the port we're using for SSH is allowed through the firewall
+  assert:
     that:
       - ansible_ssh_port in (firewall_allow| default([])| union(firewall_allow_tcp|default([])))
     when: (firewall_allow is defined) or (firewall_allow_tcp is defined) or (firewall_allow_udp is defined)
@@ -15,6 +16,7 @@
   ufw:
     rule: allow
     port: "{{ item }}"
+    state: enabled
   loop: "{{ firewall_allow }}"
   when: firewall_allow is defined
 
@@ -23,6 +25,7 @@
     rule: allow
     port: "{{ item }}"
     proto: tcp
+    state: enabled
   loop: "{{ firewall_allow_tcp }}"
   when: firewall_allow_tcp is defined
 
@@ -31,6 +34,7 @@
     rule: allow
     port: "{{ item }}"
     proto: udp
+    state: enabled
   loop: "{{ firewall_allow_udp }}"
   when: firewall_allow_udp is defined
 
