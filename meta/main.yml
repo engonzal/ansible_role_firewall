@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: firewall
   author: engonzal
   description: Provision UFW Firewall on hosts
   license: "license BSD"
@@ -7,6 +8,8 @@ galaxy_info:
   - firewall
   - vps
   - base
+  - security
+  - ufw
   platforms:
   - name: EL
     versions:
